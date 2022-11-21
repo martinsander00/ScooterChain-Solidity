@@ -23,8 +23,10 @@ contract ScooterChain {
         uint end;
     }
 
+    // Creating a map, key is the address, value is the Renter struct
     mapping (address => Renter) public renters;
 
+    // Add new renter
     function addRenter(address payable walletAddress, string memory firstName, string memory lastName, bool canRent, bool active, uint balance, uint due, uint start, uint end) public {
         renters[walletAddress] = Renter(walletAddress, firstName, lastName, canRent, active, balance, due, start, end);
 
@@ -55,6 +57,7 @@ contract ScooterChain {
         return end - start;
     }
 
+    // Get total duration of the ride
     function getTotalDuration(address walletAddress) public view returns(uint) {
         if (renters[walletAddress].start == 0 || renters[walletAddress].end == 0) {
             return 0;
@@ -84,6 +87,7 @@ contract ScooterChain {
         renters[walletAddress].due = twoMinuteIncrements * 1500000000000000;
     }
 
+    // Returning true or false depending on the canRent property
     function canRentScooter(address walletAddress) public view returns(bool) {
         return renters[walletAddress].canRent;
     }
@@ -104,10 +108,12 @@ contract ScooterChain {
         renters[walletAddress].end = 0;
     }
 
+    // Get due amount
     function getDue(address walletAddress) public view returns(uint)  {
         return renters[walletAddress].due;
     }
 
+    // Get the current Renter
     function getRenter(address walletAddress) public view returns(string memory firstName, string memory lastName, bool canRent, bool active) {
         firstName = renters[walletAddress].firstName;
         lastName = renters[walletAddress].lastName;
@@ -115,6 +121,7 @@ contract ScooterChain {
         active = renters[walletAddress].active;
     }
 
+    // Return true or false depending on if the renter exists
     function renterExists(address walletAddress) public view returns(bool) {
         if (renters[walletAddress].walletAddress != address(0)) {
             return true;
